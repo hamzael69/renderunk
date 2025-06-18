@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=symfony,dotenv,laravel
 
 ### dotenv ###
-.env
+
 
 ### Laravel ###
 /vendor/
