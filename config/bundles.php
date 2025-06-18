@@ -12,5 +12,4 @@ return [
     EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle::class => ['all' => true],
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     Doctrine\Helper\Bundle\DoctrineHelperBundle::class => ['all' => true],
-    Nakato53\Vercel\VercelBundle::class => ['dev' => true, 'test' => true],
 ];
