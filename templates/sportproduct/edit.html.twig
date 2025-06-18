@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link rel="stylesheet" href="{{ asset('css/sportproduct.css') }}">
+{% endblock %}
+
+{% block body %}
+	<h1>
+		<span class="title-text">MODIFIER</span>
+		<span class="title-sub">LIAISON SPORT/PRODUIT</span>
+	</h1>
+
+	<div class="edit-layout">
+		<div class="product-image-container">
+			<div class="product-image-wrapper">
+				<img src="{{ asset('storage/app/public/pictures/products/' ~ sportproduct.product.getPath() ~ '.png') }}" alt="{{ sportproduct.product.name }}">
+				<h2>{{ sportproduct.product.name }}</h2>
+				<div class="product-ids">
+					<span>ID Sport:
+						{{ sportproduct.idSport }}</span>
+					<span>ID Produit:
+						{{ sportproduct.idProduct }}</span>
+				</div>
+			</div>
+		</div>
+
+
+		<form method="post" action="{{ path('sportproduct_edit', {id_sport: sportproduct.idSport, id_product: sportproduct.idProduct}) }}" enctype="multipart/form-data" class="edit-form">
+
+			<div class="form-section">
+				<h3>Informations de base</h3>
+				<div class="form-grid">
+					<input type="hidden" name="id_sport" value="{{ sportproduct.idSport }}">
+					<input type="hidden" name="id_product" value="{{ sportproduct.idProduct }}">
+
+					<label>Nom :
+						<input type="text" name="name" value="{{ sportproduct.product.name }}" required>
+					</label>
+
+					<label>Type :
+						<input type="number" name="type" value="{{ sportproduct.product.type }}" required>
+					</label>
+
+					{# <label>Nouvelle image (facultatif) :
+						<input type="file" name="carousel_image" accept="image/*">
+					</label> #}
+				</div>
+			</div>
+
+			<div class="form-section">
+				<h3>Options du produit</h3>
+				<div class="form-grid">
+					<label>Col :
+						<select name="has_collar" required>
+							<option value="" disabled {% if sportproduct.product.hasCollar is not defined %}selected{% endif %}>-- Avec col / Sans col --</option>
+							<option value="1" {% if sportproduct.product.hasCollar == 1 %}selected{% endif %}>Avec col</option>
+							<option value="0" {% if sportproduct.product.hasCollar == 0 %}selected{% endif %}>Sans col</option>
+						</select>
+					</label>
+					<label>Numéro :
+						<select name="has_number" required>
+							<option value="" disabled {% if sportproduct.product.hasNumber is not defined %}selected{% endif %}>-- Avec numéro / Sans numéro --</option>
+							<option value="1" {% if sportproduct.product.hasNumber == 1 %}selected{% endif %}>Avec numéro</option>
+							<option value="0" {% if sportproduct.product.hasNumber == 0 %}selected{% endif %}>Sans numéro</option>
+						</select>
+					</label>
+					<label>Images :
+						<select name="has_pictures" required>
+							<option value="" disabled {% if sportproduct.product.hasPictures is not defined %}selected{% endif %}>-- Avec images / Sans images --</option>
+							<option value="1" {% if sportproduct.product.hasPictures == 1 %}selected{% endif %}>Avec images</option>
+							<option value="0" {% if sportproduct.product.hasPictures == 0 %}selected{% endif %}>Sans images</option>
+						</select>
+					</label>
+					<label>Texte :
+						<select name="has_text" required>
+							<option value="" disabled {% if sportproduct.product.hasText is not defined %}selected{% endif %}>-- Avec texte / Sans texte --</option>
+							<option value="1" {% if sportproduct.product.hasText == 1 %}selected{% endif %}>Avec texte</option>
+							<option value="0" {% if sportproduct.product.hasText == 0 %}selected{% endif %}>Sans texte</option>
+						</select>
+					</label>
+					<label>Nombre de couleurs :
+						<input type="number" name="color_number" value="{{ sportproduct.product.colorNumber }}" required>
+					</label>
+				</div>
+			</div>
+
+			<div class="form-section">
+				<h3>Couleurs par défaut</h3>
+				<div class="form-grid">
+					<label>Couleur 1 :
+						<select name="default_color_1" required>
+							<option value="0" {% if sportproduct.product.defaultColor1 == 0 %}selected{% endif %}>-- Aucun --</option>
+							{% for color in colors %}
+								<option value="{{ color.idColor }}" {% if sportproduct.product.defaultColor1 == color.idColor %}selected{% endif %}>
+									{{ color.idColor }} - {{ color.colorName }}
+								</option>
+							{% endfor %}
+						</select>
+					</label>
+					<label>Couleur 2 :
+						<select name="default_color_2" required>
+							<option value="0" {% if sportproduct.product.defaultColor2 == 0 %}selected{% endif %}>-- Aucun --</option>
+							{% for color in colors %}
+								<option value="{{ color.idColor }}" {% if sportproduct.product.defaultColor2 == color.idColor %}selected{% endif %}>
+									{{ color.idColor }} - {{ color.colorName }}
+								</option>
+							{% endfor %}
+						</select>
+					</label>
+					<label>Couleur 3 :
+						<select name="default_color_3" required>
+							<option value="0" {% if sportproduct.product.defaultColor3 == 0 %}selected{% endif %}>-- Aucun --</option>
+							{% for color in colors %}
+								<option value="{{ color.idColor }}" {% if sportproduct.product.defaultColor3 == color.idColor %}selected{% endif %}>
+									{{ color.idColor }} - {{ color.colorName }}
+								</option>
+							{% endfor %}
+						</select>
+					</label>
+					<label>Couleur 4 :
+						<select name="default_color_4" required>
+							<option value="0" {% if sportproduct.product.defaultColor4 == 0 %}selected{% endif %}>-- Aucun --</option>
+							{% for color in colors %}
+								<option value="{{ color.idColor }}" {% if sportproduct.product.defaultColor4 == color.idColor %}selected{% endif %}>
+									{{ color.idColor }} - {{ color.colorName }}
+								</option>
+							{% endfor %}
+						</select>
+					</label>
+					<label>Couleur 5 :
+						<select name="default_color_5" required>
+							<option value="0" {% if sportproduct.product.defaultColor5 == 0 %}selected{% endif %}>-- Aucun --</option>
+							{% for color in colors %}
+								<option value="{{ color.idColor }}" {% if sportproduct.product.defaultColor5 == color.idColor %}selected{% endif %}>
+									{{ color.idColor }} - {{ color.colorName }}
+								</option>
+							{% endfor %}
+						</select>
+					</label>
+				</div>
+			</div>
+ 
+
+			<div class="button-group">
+				<a href="{{ path('sportproduct_index') }}" class="btn-details">Retour</a>
+				<button type="submit" class="btn-accent">Mettre à jour</button>
+			</div>
+		</form>
+	</div>
+
+	<script>// ...existing code...</script>{% endblock %}

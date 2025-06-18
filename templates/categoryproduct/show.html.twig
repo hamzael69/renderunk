@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/sportproduct.css') }}">
+{% endblock %}
+
+{% block body %}
+    <aside class="admin-sidebar">
+        <div class="sidebar-title">Admin</div>
+        <nav>
+            <a href="{{ path('admin') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            <a href="{{ path('categoryproduct_index') }}" class="active"><i class="fas fa-link"></i> Goodies</a>
+            <a href="{{ path('sportproduct_index') }}"><i class="fas fa-tags"></i> Tenues de sport</a>
+        </nav>
+    </aside>
+    <main class="admin-main-content">
+        <h1>
+            <span class="title-text">Goodies</span>
+            <span class="title-sub">(Détail de la liaison)</span>
+        </h1>
+        <div class="show-layout">
+            <div class="product-image-container">
+                <div class="product-image-wrapper">
+                    <img src="{{ asset('storage/app/public/pictures/products/' ~ categoryproduct.product.getPath() ~ '.png') }}" alt="{{ categoryproduct.product.getName() }}">
+                    <h2>{{ categoryproduct.product.name }}</h2>
+                    <div class="product-ids">
+                        <span>ID Catégorie: {{ categoryproduct.idCategory }}</span>
+                        <span>ID Produit: {{ categoryproduct.idProduct }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-details">
+                <div class="details-section">
+                    <h3>Informations de base</h3>
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Nom</span>
+                            <span class="detail-value">{{ categoryproduct.product.name }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Type</span>
+                            <span class="detail-value">{{ categoryproduct.product.type }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="details-section">
+                    <h3>Options du produit</h3>
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Col</span>
+                            <span class="detail-value">{{ categoryproduct.product.hasCollar ? 'Oui' : 'Non' }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Numéro</span>
+                            <span class="detail-value">{{ categoryproduct.product.hasNumber ? 'Oui' : 'Non' }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Images</span>
+                            <span class="detail-value">{{ categoryproduct.product.hasPictures ? 'Oui' : 'Non' }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Texte</span>
+                            <span class="detail-value">{{ categoryproduct.product.hasText ? 'Oui' : 'Non' }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Nombre de couleurs</span>
+                            <span class="detail-value">{{ categoryproduct.product.colorNumber }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="details-section">
+                    <h3>Couleurs par défaut</h3>
+                    <div class="details-grid">
+                        {% for i in 1..5 %}
+                            <div class="detail-item">
+                                <span class="detail-label">Couleur {{ i }}</span>
+                                <span class="detail-value">
+                                    {% set colorId = attribute(categoryproduct.product, 'defaultColor' ~ i) %}
+                                    {% set c = colors|filter(color => color.idColor == colorId)|first %}
+                                    {% if colorId == 0 or c is empty %}
+                                        Aucun
+                                    {% else %}
+                                        {{ c.idColor }} - {{ c.colorName }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="button-group">
+                    <a href="{{ path('categoryproduct_index') }}" class="btn-details">Retour</a>
+                    <a href="{{ path('categoryproduct_edit', {id_category: categoryproduct.idCategory, id_product: categoryproduct.idProduct}) }}" class="btn-modifier">Modifier</a>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

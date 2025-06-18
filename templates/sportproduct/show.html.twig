@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/sportproduct.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1><span class="title-text">DÉTAILS</span> <span class="title-sub">LIAISON SPORT/PRODUIT</span></h1>
+    
+    <div class="show-layout">
+        <div class="product-image-container">
+            <div class="product-image-wrapper">
+                <img src="{{ asset('storage/app/public/pictures/products/' ~ sportproduct.product.getPath() ~ '.png') }}" alt="{{ sportproduct.product.getName() }}">
+                <h2>{{ sportproduct.product.name }}</h2>
+                <div class="product-ids">
+                    <span>ID Sport: {{ sportproduct.idSport }}</span>
+                    <span>ID Produit: {{ sportproduct.idProduct }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="product-details">
+            <div class="details-section">
+                <h3>Informations de base</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Nom</span>
+                        <span class="detail-value">{{ sportproduct.product.name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Type</span>
+                        <span class="detail-value">{{ sportproduct.product.type }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="details-section">
+                <h3>Options du produit</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Col</span>
+                        <span class="detail-value">{{ sportproduct.product.hasCollar ? 'Oui' : 'Non' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Numéro</span>
+                        <span class="detail-value">{{ sportproduct.product.hasNumber ? 'Oui' : 'Non' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Images</span>
+                        <span class="detail-value">{{ sportproduct.product.hasPictures ? 'Oui' : 'Non' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Texte</span>
+                        <span class="detail-value">{{ sportproduct.product.hasText ? 'Oui' : 'Non' }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Nombre de couleurs</span>
+                        <span class="detail-value">{{ sportproduct.product.colorNumber }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="details-section">
+                <h3>Couleurs par défaut</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Couleur 1</span>
+                        <span class="detail-value">
+                            {% set c = colors|filter(color => color.idColor == sportproduct.product.defaultColor1)|first %}
+                            {% if sportproduct.product.defaultColor1 == 0 or c is empty %}
+                                Aucun
+                            {% else %}
+                                {{ c.idColor }} - {{ c.colorName }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Couleur 2</span>
+                        <span class="detail-value">
+                            {% set c = colors|filter(color => color.idColor == sportproduct.product.defaultColor2)|first %}
+                            {% if sportproduct.product.defaultColor2 == 0 or c is empty %}
+                                Aucun
+                            {% else %}
+                                {{ c.idColor }} - {{ c.colorName }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Couleur 3</span>
+                        <span class="detail-value">
+                            {% set c = colors|filter(color => color.idColor == sportproduct.product.defaultColor3)|first %}
+                            {% if sportproduct.product.defaultColor3 == 0 or c is empty %}
+                                Aucun
+                            {% else %}
+                                {{ c.idColor }} - {{ c.colorName }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Couleur 4</span>
+                        <span class="detail-value">
+                            {% set c = colors|filter(color => color.idColor == sportproduct.product.defaultColor4)|first %}
+                            {% if sportproduct.product.defaultColor4 == 0 or c is empty %}
+                                Aucun
+                            {% else %}
+                                {{ c.idColor }} - {{ c.colorName }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Couleur 5</span>
+                        <span class="detail-value">
+                            {% set c = colors|filter(color => color.idColor == sportproduct.product.defaultColor5)|first %}
+                            {% if sportproduct.product.defaultColor5 == 0 or c is empty %}
+                                Aucun
+                            {% else %}
+                                {{ c.idColor }} - {{ c.colorName }}
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <a href="{{ path('sportproduct_index') }}" class="btn-details">Retour</a>
+                <a href="{{ path('sportproduct_edit', {id_sport: sportproduct.idSport, id_product: sportproduct.idProduct}) }}" class="btn-modifier">Modifier</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

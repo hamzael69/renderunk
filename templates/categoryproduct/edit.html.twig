@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/sportproduct.css') }}">
+{% endblock %}
+
+{% block body %}
+    <h1>
+        <span class="title-text">MODIFIER</span>
+        <span class="title-sub">LIAISON CATÉGORIE/PRODUIT</span>
+    </h1>
+
+    <div class="edit-layout">
+        <div class="product-image-container">
+            <div class="product-image-wrapper">
+                <img src="{{ asset('storage/app/public/pictures/products/' ~ categoryproduct.product.getPath() ~ '.png') }}" alt="{{ categoryproduct.product.name }}">
+                <h2>{{ categoryproduct.product.name }}</h2>
+                <div class="product-ids">
+                    <span>ID Catégorie: {{ categoryproduct.idCategory }}</span>
+                    <span>ID Produit: {{ categoryproduct.idProduct }}</span>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" action="{{ path('categoryproduct_edit', {id_category: categoryproduct.idCategory, id_product: categoryproduct.idProduct}) }}" enctype="multipart/form-data" class="edit-form">
+
+            <div class="form-section">
+                <h3>Informations de base</h3>
+                <div class="form-grid">
+                    <input type="hidden" name="id_category" value="{{ categoryproduct.idCategory }}">
+                    <input type="hidden" name="id_product" value="{{ categoryproduct.idProduct }}">
+
+                    <label>Nom :
+                        <input type="text" name="name" value="{{ categoryproduct.product.name }}" required>
+                    </label>
+
+                    <label>Type :
+                        <input type="number" name="type" value="{{ categoryproduct.product.type }}" required>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Options du produit</h3>
+                <div class="form-grid">
+                    <label>Col :
+                        <select name="has_collar" required>
+                            <option value="" disabled {% if categoryproduct.product.hasCollar is not defined %}selected{% endif %}>-- Avec col / Sans col --</option>
+                            <option value="1" {% if categoryproduct.product.hasCollar == 1 %}selected{% endif %}>Avec col</option>
+                            <option value="0" {% if categoryproduct.product.hasCollar == 0 %}selected{% endif %}>Sans col</option>
+                        </select>
+                    </label>
+                    <label>Numéro :
+                        <select name="has_number" required>
+                            <option value="" disabled {% if categoryproduct.product.hasNumber is not defined %}selected{% endif %}>-- Avec numéro / Sans numéro --</option>
+                            <option value="1" {% if categoryproduct.product.hasNumber == 1 %}selected{% endif %}>Avec numéro</option>
+                            <option value="0" {% if categoryproduct.product.hasNumber == 0 %}selected{% endif %}>Sans numéro</option>
+                        </select>
+                    </label>
+                    <label>Images :
+                        <select name="has_pictures" required>
+                            <option value="" disabled {% if categoryproduct.product.hasPictures is not defined %}selected{% endif %}>-- Avec images / Sans images --</option>
+                            <option value="1" {% if categoryproduct.product.hasPictures == 1 %}selected{% endif %}>Avec images</option>
+                            <option value="0" {% if categoryproduct.product.hasPictures == 0 %}selected{% endif %}>Sans images</option>
+                        </select>
+                    </label>
+                    <label>Texte :
+                        <select name="has_text" required>
+                            <option value="" disabled {% if categoryproduct.product.hasText is not defined %}selected{% endif %}>-- Avec texte / Sans texte --</option>
+                            <option value="1" {% if categoryproduct.product.hasText == 1 %}selected{% endif %}>Avec texte</option>
+                            <option value="0" {% if categoryproduct.product.hasText == 0 %}selected{% endif %}>Sans texte</option>
+                        </select>
+                    </label>
+                    <label>Nombre de couleurs :
+                        <input type="number" name="color_number" value="{{ categoryproduct.product.colorNumber }}" required>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Couleurs par défaut</h3>
+                <div class="form-grid">
+                    <label>Couleur 1 :
+                        <select name="default_color_1" required>
+                            <option value="0" {% if categoryproduct.product.defaultColor1 == 0 %}selected{% endif %}>-- Aucun --</option>
+                            {% for color in colors %}
+                                <option value="{{ color.idColor }}" {% if categoryproduct.product.defaultColor1 == color.idColor %}selected{% endif %}>
+                                    {{ color.idColor }} - {{ color.colorName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>Couleur 2 :
+                        <select name="default_color_2" required>
+                            <option value="0" {% if categoryproduct.product.defaultColor2 == 0 %}selected{% endif %}>-- Aucun --</option>
+                            {% for color in colors %}
+                                <option value="{{ color.idColor }}" {% if categoryproduct.product.defaultColor2 == color.idColor %}selected{% endif %}>
+                                    {{ color.idColor }} - {{ color.colorName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>Couleur 3 :
+                        <select name="default_color_3" required>
+                            <option value="0" {% if categoryproduct.product.defaultColor3 == 0 %}selected{% endif %}>-- Aucun --</option>
+                            {% for color in colors %}
+                                <option value="{{ color.idColor }}" {% if categoryproduct.product.defaultColor3 == color.idColor %}selected{% endif %}>
+                                    {{ color.idColor }} - {{ color.colorName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>Couleur 4 :
+                        <select name="default_color_4" required>
+                            <option value="0" {% if categoryproduct.product.defaultColor4 == 0 %}selected{% endif %}>-- Aucun --</option>
+                            {% for color in colors %}
+                                <option value="{{ color.idColor }}" {% if categoryproduct.product.defaultColor4 == color.idColor %}selected{% endif %}>
+                                    {{ color.idColor }} - {{ color.colorName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <label>Couleur 5 :
+                        <select name="default_color_5" required>
+                            <option value="0" {% if categoryproduct.product.defaultColor5 == 0 %}selected{% endif %}>-- Aucun --</option>
+                            {% for color in colors %}
+                                <option value="{{ color.idColor }}" {% if categoryproduct.product.defaultColor5 == color.idColor %}selected{% endif %}>
+                                    {{ color.idColor }} - {{ color.colorName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <a href="{{ path('categoryproduct_index') }}" class="btn-details">Retour</a>
+                <button type="submit" class="btn-accent">Mettre à jour</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

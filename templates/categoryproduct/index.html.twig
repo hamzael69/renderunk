@@ -1,0 +1,433 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/sportproduct.css') }}">
+    <style>
+        .btn-loupe, .btn-edit, .btn-supprimer {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-loupe { background: #1976d2; box-shadow: 0 2px 6px rgba(25, 118, 210, 0.08);}
+        .btn-loupe:hover { background: #1251a3; }
+        .btn-loupe svg { width: 20px; height: 20px; display: block; }
+        .btn-edit { background: #ff9800; margin-left: 6px; box-shadow: 0 2px 6px rgba(255, 152, 0, 0.08);}
+        .btn-edit:hover { background: #e65100; }
+        .btn-edit svg { width: 20px; height: 20px; display: block; }
+        .btn-supprimer { background: #e53935; margin-left: 6px; box-shadow: 0 2px 6px rgba(229, 57, 53, 0.08);}
+        .btn-supprimer:hover { background: #b71c1c; }
+        .btn-supprimer svg { width: 20px; height: 20px; display: block; }
+        .sportproduct-actions {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <aside class="admin-sidebar">
+        <div class="sidebar-title">Admin</div>
+        <nav>
+            <a href="{{ path('admin') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+            
+            <a href="{{ path('sportproduct_index') }}"><i class="fas fa-tags"></i> Tenues de sport</a>
+            <a href="{{ path('categoryproduct_index') }}" class="active"><i class="fas fa-link"></i> Goodies</a>
+        </nav>
+    </aside>
+    <main class="admin-main-content">
+        <h1>
+            <span class="title-text">Goodies</span>
+            <span class="title-sub">(LIAISONS GOODIES/PRODUIT)</span>
+        </h1>
+        <div class="add-product-btn-wrapper">
+            <button id="toggle-form-btn" class="btn-modifier">Ajouter un produit</button>
+        </div>
+        <form id="categoryproduct-form" method="post" action="{{ path('categoryproduct_add') }}" enctype="multipart/form-data" class="sportproduct-form" style="display:none;">
+            <div>
+                <label>ID Catégorie :
+                    <select name="id_category" required>
+                        <option value="">-- Sélectionner une catégorie --</option>
+                        {% for category in categories %}
+                            <option value="{{ category.idCategory }}">{{ category.idCategory }} - {{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>ID Produit :
+                    <input type="number" name="id_product" id="id_product_input" required>
+                    <span id="id_product_error" style="color:red;display:none;">Cet ID Produit existe déjà !</span>
+                </label>
+                <label>Nom :
+                    <input type="text" name="name" required>
+                </label>
+                <label>Image du carrousel :
+                    <input type="file" name="carousel_image" accept="image/*" required>
+                </label>
+                <label>Type :
+                    <input type="number" name="type" required placeholder="1 pour tenue de sport, 2 pour produit goodies.">
+                </label>
+                <label>Col :
+                    <select name="has_collar" required>
+                        <option value="" selected disabled>-- Avec col / Sans col --</option>
+                        <option value="1">Avec col</option>
+                        <option value="0">Sans col</option>
+                    </select>
+                </label>
+                <label>Numéro :
+                    <select name="has_number" required>
+                        <option value="" selected disabled>-- Avec numéro / Sans numéro --</option>
+                        <option value="1">Avec numéro</option>
+                        <option value="0">Sans numéro</option>
+                    </select>
+                </label>
+                <label>Images :
+                    <select name="has_pictures" required>
+                        <option value="" selected disabled>-- Avec images / Sans images --</option>
+                        <option value="1">Avec images</option>
+                        <option value="0">Sans images</option>
+                    </select>
+                </label>
+                <label>Texte :
+                    <select name="has_text" required>
+                        <option value="" selected disabled>-- Avec texte / Sans texte --</option>
+                        <option value="1">Avec texte</option>
+                        <option value="0">Sans texte</option>
+                    </select>
+                </label>
+                <label>Nombre de couleurs :
+                    <input type="number" name="color_number" required placeholder="Nombre de couleurs (1 à 5)">
+                </label>
+                <label>Couleur par défaut 1 :
+                    <select name="default_color_1" required>
+                        <option value="0" selected>-- Aucun --</option>
+                        {% for color in colors %}
+                            <option value="{{ color.idColor }}">{{ color.idColor }} - {{ color.colorName }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>Couleur par défaut 2 :
+                    <select name="default_color_2" required>
+                        <option value="0" selected>-- Aucun --</option>
+                        {% for color in colors %}
+                            <option value="{{ color.idColor }}">{{ color.idColor }} - {{ color.colorName }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>Couleur par défaut 3 :
+                    <select name="default_color_3" required>
+                        <option value="0" selected>-- Aucun --</option>
+                        {% for color in colors %}
+                            <option value="{{ color.idColor }}">{{ color.idColor }} - {{ color.colorName }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>Couleur par défaut 4 :
+                    <select name="default_color_4" required>
+                        <option value="0" selected>-- Aucun --</option>
+                        {% for color in colors %}
+                            <option value="{{ color.idColor }}">{{ color.idColor }} - {{ color.colorName }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label>Couleur par défaut 5 :
+                    <select name="default_color_5" required>
+                        <option value="0" selected>-- Aucun --</option>
+                        {% for color in colors %}
+                            <option value="{{ color.idColor }}">{{ color.idColor }} - {{ color.colorName }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+            </div>
+
+
+
+			<div>
+        <label>
+            Produit avec plusieurs cols ?
+            <input type="checkbox" name="has_multiple_collars" id="has_multiple_collars">
+        </label>
+    </div>
+
+    <div id="collar-images-wrapper">
+        <div id="images-main-inputs">
+            <label>Images du produit (si un seul col) :
+                <input type="file" name="images[]" onchange="previewImages(this, 'preview-images-main')">
+            </label>
+            <button type="button" id="add-image-main-btn" onclick="addImageInput('images-main-inputs', 'images[]', 'preview-images-main')">Ajouter une image</button>
+            <div id="preview-images-main" class="preview-images"></div>
+        </div>
+    </div>
+
+
+
+
+            <button type="submit">Ajouter</button>
+        </form>
+
+        <script>
+
+
+
+		document.getElementById('has_multiple_collars').addEventListener('change', function () {
+    const wrapper = document.getElementById('collar-images-wrapper');
+    wrapper.innerHTML = '';
+
+    if (this.checked) {
+        for (let i = 1; i <= 4; i++) {
+            const inputsDiv = document.createElement('div');
+            inputsDiv.id = `images-col${i}-inputs`;
+
+            const label = document.createElement('label');
+            label.innerHTML = `Images pour col ${i} : <input type="file" name="images_col_${i}[]" onchange="previewImages(this, 'preview-images-col${i}')">`;
+            inputsDiv.appendChild(label);
+
+            const addBtn = document.createElement('button');
+            addBtn.type = 'button';
+            addBtn.textContent = 'Ajouter une image';
+            addBtn.onclick = function () {
+                addImageInput(`images-col${i}-inputs`, `images_col_${i}[]`, `preview-images-col${i}`);
+            };
+            inputsDiv.appendChild(addBtn);
+
+            const previewDiv = document.createElement('div');
+            previewDiv.id = `preview-images-col${i}`;
+            previewDiv.className = 'preview-images';
+            inputsDiv.appendChild(previewDiv);
+
+            wrapper.appendChild(inputsDiv);
+        }
+    } else {
+        const inputsDiv = document.createElement('div');
+        inputsDiv.id = 'images-main-inputs';
+
+        const label = document.createElement('label');
+        label.innerHTML = `Images du produit (pas de col) : <input type="file" name="images[]" onchange="previewImages(this, 'preview-images-main')">`;
+        inputsDiv.appendChild(label);
+
+        const addBtn = document.createElement('button');
+        addBtn.type = 'button';
+        addBtn.textContent = 'Ajouter une image';
+        addBtn.onclick = function () {
+            addImageInput('images-main-inputs', 'images[]', 'preview-images-main');
+        };
+        inputsDiv.appendChild(addBtn);
+
+        const previewDiv = document.createElement('div');
+        previewDiv.id = 'preview-images-main';
+        previewDiv.className = 'preview-images';
+        inputsDiv.appendChild(previewDiv);
+
+        wrapper.appendChild(inputsDiv);
+    }
+});
+
+// Ajoute dynamiquement un input file
+function addImageInput(wrapperId, inputName, previewId) {
+    const wrapper = document.getElementById(wrapperId);
+    const label = document.createElement('label');
+    label.innerHTML = `<input type="file" name="${inputName}" onchange="previewImages(this, '${previewId}')">`;
+    wrapper.insertBefore(label, wrapper.querySelector('button'));
+}
+
+// Fonction d'aperçu des images
+function previewImages(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (!preview) return;
+    Array.from(input.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.maxWidth = '80px';
+            img.style.margin = '5px';
+            preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+
+
+            // Liste des IDs produits déjà utilisés (générée côté serveur)
+            const usedProductIds = {{ usedProductIds|json_encode|raw }};
+            document.getElementById('id_product_input').addEventListener('input', function () {
+                const val = parseInt(this.value, 10);
+                const error = document.getElementById('id_product_error');
+                if (usedProductIds.includes(val)) {
+                    error.style.display = 'inline';
+                } else {
+                    error.style.display = 'none';
+                }
+            });
+            document.getElementById('toggle-form-btn').addEventListener('click', function () {
+                const form = document.getElementById('categoryproduct-form');
+                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+            });
+        </script>
+
+        <br>
+        <!-- Barre de recherche -->
+        <div class="sportproduct-search-bar">
+            <input type="text" id="categoryproduct-search-input" placeholder="Rechercher par nom ou ID..." autocomplete="off">
+            <button type="button" id="categoryproduct-search-btn">
+                <i class="fas fa-search"></i>
+                Rechercher</button>
+        </div>
+        <div class="table-responsive">
+            <table border="1" cellpadding="5" class="sportproduct-table" id="categoryproduct-table">
+                <thead>
+                    <tr>
+                        <th>ID Catégorie</th>
+                        <th>ID Produit</th>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cp in categoryproducts %}
+                        {% if cp.product %}
+                            <tr>
+                                <td>{{ cp.idCategory }}</td>
+                                <td>{{ cp.idProduct }}</td>
+                                <td>
+                                    <img src="{{ asset('storage/app/public/pictures/products/' ~ cp.product.getPath() ~ '.png') }}" alt="{{ cp.product.getName() }}">
+                                </td>
+                                <td>{{ cp.product.name }}</td>
+                                <td>{{ cp.product.type }}</td>
+                                <td>
+                                    <div class="sportproduct-actions">
+                                        <a href="{{ path('categoryproduct_show', {id_category: cp.idCategory, id_product: cp.idProduct}) }}" class="btn-loupe" title="Détails">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <circle cx="9" cy="9" r="7" stroke="white" stroke-width="2"/>
+                                                <line x1="14.2929" y1="14.7071" x2="18" y2="18.4142" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                        </a>
+                                        <a href="{{ path('categoryproduct_edit', {id_category: cp.idCategory, id_product: cp.idProduct}) }}" class="btn-edit" title="Modifier">
+                                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                <path d="M14.7 3.29a1 1 0 0 1 1.41 0l0.59 0.59a1 1 0 0 1 0 1.41l-9.17 9.17-2.12 0.71 0.71-2.12 9.17-9.17z" fill="white"/>
+                                                <path d="M3 17h14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                            </svg>
+                                        </a>
+                                        <form method="post" action="{{ path('categoryproduct_delete', {id_category: cp.idCategory, id_product: cp.idProduct}) }}" style="display:inline;">
+                                            <button type="submit" class="btn-supprimer" onclick="return confirm('Supprimer cette liaison ?')" title="Supprimer">
+                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                    <rect x="5" y="7" width="10" height="8" rx="2" stroke="white" stroke-width="2"/>
+                                                    <path d="M3 7h14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                                    <path d="M8 7V5a2 2 0 0 1 4 0v2" stroke="white" stroke-width="2"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="spacer-row">
+                                <td colspan="6"></td>
+                            </tr>
+                        {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6">Aucune liaison trouvée.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+    // Recherche dynamique dans le tableau avec mise en haut du résultat
+    const originalOrder = [];
+    document.addEventListener('DOMContentLoaded', function () {
+        const tbody = document.getElementById('categoryproduct-table').querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr')).filter(r => !r.querySelector('td[colspan]'));
+        rows.forEach(row => originalOrder.push(row.cloneNode(true)));
+    });
+
+    function filterCategoryproductTable() {
+        const input = document.getElementById('categoryproduct-search-input');
+        const filter = input.value.trim().toLowerCase();
+        const table = document.getElementById('categoryproduct-table');
+        const tbody = table.querySelector('tbody');
+        const allRows = Array.from(tbody.querySelectorAll('tr')).filter(r => !r.querySelector('td[colspan]'));
+        const spacerRows = Array.from(tbody.querySelectorAll('tr.spacer-row'));
+        const dataRows = allRows.filter(r => !r.classList.contains('spacer-row'));
+        let foundRows = [];
+
+        // Toujours masquer toutes les lignes au départ
+        dataRows.forEach(row => {
+            row.style.display = 'none';
+        });
+        spacerRows.forEach(row => {
+            row.style.display = 'none';
+        });
+
+        // Filtrer et collecter les lignes correspondantes
+        dataRows.forEach(row => {
+            const tds = row.querySelectorAll('td');
+            const idCategory = tds[0]?.textContent.trim().toLowerCase() || '';
+            const idProduct = tds[1]?.textContent.trim().toLowerCase() || '';
+            const name = tds[3]?.textContent.trim().toLowerCase() || '';
+            if (
+                filter === '' ||
+                idCategory.includes(filter) ||
+                idProduct.includes(filter) ||
+                name.includes(filter)
+            ) {
+                foundRows.push(row);
+            }
+        });
+
+        // Afficher les lignes trouvées en haut du tableau, avec leur spacer
+        if (filter !== '' && foundRows.length > 0) {
+            // On retire toutes les lignes trouvées et leurs spacers du tbody
+            foundRows.forEach(row => {
+                const spacer = row.nextElementSibling && row.nextElementSibling.classList.contains('spacer-row')
+                    ? row.nextElementSibling
+                    : null;
+                tbody.removeChild(row);
+                if (spacer) tbody.removeChild(spacer);
+            });
+            // On insère les résultats trouvés en haut, avec leur spacer
+            let insertBefore = tbody.firstChild;
+            foundRows.forEach(row => {
+                row.style.display = '';
+                const spacer = document.createElement('tr');
+                spacer.className = 'spacer-row';
+                spacer.innerHTML = `<td colspan="6"></td>`;
+                tbody.insertBefore(spacer, insertBefore);
+                tbody.insertBefore(row, spacer);
+            });
+        } else if (filter === '') {
+            // Si pas de filtre, on restaure l'ordre initial
+            const tbody = document.getElementById('categoryproduct-table').querySelector('tbody');
+            // Supprime toutes les lignes existantes (hors "Aucune liaison trouvée")
+            Array.from(tbody.querySelectorAll('tr')).forEach(row => {
+                if (!row.querySelector('td[colspan]')) tbody.removeChild(row);
+            });
+            // Réinsère les lignes dans l'ordre initial
+            originalOrder.forEach(row => tbody.appendChild(row.cloneNode(true)));
+        }
+
+        // Gère le cas "Aucune liaison trouvée"
+        const noResultRow = table.querySelector('tbody tr td[colspan]');
+        if (noResultRow) {
+            const visibleRows = Array.from(tbody.querySelectorAll('tr')).filter(r => r.style.display !== 'none' && !r.querySelector('td[colspan]') && !r.classList.contains('spacer-row'));
+            noResultRow.parentElement.style.display = visibleRows.length === 0 ? '' : 'none';
+        }
+    }
+
+    document.getElementById('categoryproduct-search-input').addEventListener('input', filterCategoryproductTable);
+    document.getElementById('categoryproduct-search-btn').addEventListener('click', filterCategoryproductTable);
+    </script>
+{% endblock %}
